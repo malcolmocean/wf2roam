@@ -1,0 +1,40 @@
+{
+  "name": "workflowy_to_roam_json",
+  "version": "0.0.1",
+  "description": "Script for converting workflowy json into roam import json",
+  "main": "workflowy_to_roam_json.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/malcolmocean/workflowy_to_roam_json.git"
+  },
+  "pre-commit": [
+    "lint",
+    "test",
+    "mocha",
+    "gulp"
+  ],
+  "config": {
+    "pre-commit": {
+      "lint": true,
+      "validate": true
+    }
+  },
+  "author": "Malcolm Ocean <malcolm@malcolmocean.com> (http://malcolmocean.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "opusfluxus": "^0.7.1",
+  },
+  "bugs": {
+    "url": "https://github.com/malcolmocean/workflowy_to_roam_json/issues"
+  },
+  "engines": {
+    "node": "10.14.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@heroku.com:complicemail.git"
+  },
+  "bin": {
+    "wf2roam": "wf2roam.js"
+  }
+}
