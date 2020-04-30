@@ -33,6 +33,7 @@ const nodes = [{
   ]
 }]
 const dateJoinedTimestampInSeconds = 1467241264
+const options = {underlineToHighlight: true}
 const roamJson = wf2roam.convertJsonObject(nodes, dateJoinedTimestampInSeconds, options)
 ```
 

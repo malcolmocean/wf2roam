@@ -1,6 +1,6 @@
 {
   "name": "wf2roam",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Script for converting workflowy json into roam import json",
   "main": "wf2roam.js",
   "repository": {
