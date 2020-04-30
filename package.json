@@ -1,6 +1,6 @@
 {
   "name": "wf2roam",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Script for converting workflowy json into roam import json",
   "main": "wf2roam.js",
   "repository": {
@@ -23,7 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "minimist": "^1.1.0",
-    "opusfluxus": "^0.7.2"
+    "opusfluxus": "^0.7.4"
   },
   "bugs": {
     "url": "https://github.com/malcolmocean/wf2roam/issues"

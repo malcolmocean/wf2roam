@@ -1,9 +1,9 @@
 #! /usr/bin/env node
-// const WorkFlowy = require('opusfluxus') // TODO switch back
-const WorkFlowy = require('/home/malcolm/dev/opusfluxus/index.js')
+const WorkFlowy = require('opusfluxus')
 const fs = require('fs')
 
-const format = (string, options={}) => {
+function format (string, options) {
+  if (!options) {options = {}}
   // convert <b><i>X</i></b> // workflowy seems to prefer this order
   //       & <i><b>X</b></i>
   //      to   **__X__**     // roam only supports this order
@@ -42,7 +42,8 @@ const format = (string, options={}) => {
   return string
 }
 
-function wfToRoam (pageNodes, dateJoinedTimestampInSeconds, options={}) {
+function wfToRoam (pageNodes, dateJoinedTimestampInSeconds, options) {
+  if (!options) {options = {}}
   if (!pageNodes.length && pageNodes.nm) {pageNodes = [pageNodes]}
 
   // wf last modified is measured as seconds since user joined
@@ -87,9 +88,8 @@ function wfToRoam (pageNodes, dateJoinedTimestampInSeconds, options={}) {
   return pageNodes.map(node => wfNodeToRoamPage(node))
 }
 
-
-function convertJsonObject (obj, user) {
-  return wfToRoam(obj, user)
+function convertJsonObject (obj, dateJoinedTimestampInSeconds, options) {
+  return wfToRoam(obj, dateJoinedTimestampInSeconds, options)
 }
 
 function convertInitializationData (initdata) {
@@ -118,7 +118,7 @@ async function fetchInitdataForSessionId (sessionid) {
   return wf.meta
 }
 
-function auth () {
+async function auth () {
   return WorkFlowy.cli()
 }
 
@@ -160,10 +160,17 @@ async function wf2roam_cli () {
   let sessionid
   if (command == 'sessionid') {
     sessionid = extra
-  } else if (command == 'useWfConfig') {
-    sessionid = await WorkFlowy.loadWfConfig().sessionid
+    if (!sessionid) {
+      console.log("Invalid command: must provide a sessionid as second argument")
+      console.log("eg\n\t  wf2roam sessionid afh983wf5yh89w3fh5\n")
+      process.exit(1)
+    }
   } else {
-    const sessionid = await auth()
+    sessionid = await WorkFlowy.loadWfConfig().sessionid
+    if (!sessionid) {
+      console.log("await auth")
+      sessionid = await auth()
+    }
   }
   console.log("sessionid", sessionid)
   let initdata
@@ -173,18 +180,17 @@ async function wf2roam_cli () {
     initdata = await fetchInitdataForSessionId(sessionid)
   }
 
-  console.log("argv.wfid", argv.wfid)
-  if (argv.wfid) {
-    const tree = initdata.projectTreeData.mainProjectTreeInfo.rootProjectChildren
-    const search = node => node.id.endsWith(argv.wfid)
-    const found = findNode(tree, search)
-    const pages = argv.ch ? found.ch : [found]
-    initdata.projectTreeData.mainProjectTreeInfo.rootProjectChildren = pages
-  }
-
   let roamJson
   if (initdata) {
     console.log("got workflowy data")
+    if (argv.wfid) {
+      console.log("wfid", argv.wfid)
+      const tree = initdata.projectTreeData.mainProjectTreeInfo.rootProjectChildren
+      const search = node => node.id.endsWith(argv.wfid)
+      const found = findNode(tree, search)
+      const pages = argv.ch || argv.children ? found.ch : [found]
+      initdata.projectTreeData.mainProjectTreeInfo.rootProjectChildren = pages
+    }
     roamJson = convertInitializationData(initdata)
   } else {
     return console.log("No valid initialization data found.")
@@ -194,21 +200,20 @@ async function wf2roam_cli () {
     // LATER: confirm overwrite if exists
     await writeJsonToFile(argv.o || argv.output, roamJson)
   } else {
-    console.log('roamJson', roamJson)
+    console.log('roamJson', JSON.stringify(roamJson, null, 2))
   }
 }
 
 if (require.main === module) { // called directly
   wf2roam_cli()
   .catch(err => {
-    console.log('\x1b[33m')//, 'Error')
+    console.log('\x1b[31m')//, 'Error')
     console.log(err)
     console.log('\x1b[0m')
   })
 } else {
-  exports.auth = auth
-  exports.wfToRoam = wfToRoam
   exports.convertJsonObject = convertJsonObject
-  exports.convertInitializationDataFile = convertInitializationDataFile
-  exports.convertAllForSessionId = convertAllForSessionId
+  exports.convertInitializationData = convertInitializationData
+  exports.fetchInitdataForSessionId = fetchInitdataForSessionId
+  exports.findNode = findNode
 }
