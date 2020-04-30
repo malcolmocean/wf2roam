@@ -55,7 +55,7 @@ function wfToRoam (pageNodes, dateJoinedTimestampInSeconds, options) {
   const wfNodeToRoamBlock = node => {
     const block = {
       string: format(node.nm, options),
-      uid: node.id,
+      uid: node.id.replace(/.*-/, ''), // just the last 12, so it matches urls
       'edit-time': wfLmToRoamEditTime(node.lm),
       // 'create-time' will be same as edit time (wf doesn't track separately)
     }
