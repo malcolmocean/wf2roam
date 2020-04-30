@@ -1,10 +1,10 @@
-# workflowy_to_roam_json
+# wf2roam
 
-# HASN'T BEEN TESTED I JUST WANTED TO BACK UP MY CODE TO GITHUB
+Script for converting [WorkFlowy](https://workflowy.com) JSON into [Roam](https://roamresearch.com) import JSON. You can already easily copy-paste between WorkFlowy & Roam , but this script will preserve edit stamps and turn top-level nodes (or nodes at some other level) into their own pages.
 
-Script for converting [WorkFlowy](https://workflowy.com) JSON into [Roam](https://roamresearch.com) import JSON.
+Works as both a node module for use in other projects, as well as a command-line interface. The cli can be used in many diverse ways.
 
-## Installation
+## As node module
 
 ### Install to your node project
 
@@ -12,10 +12,22 @@ Script for converting [WorkFlowy](https://workflowy.com) JSON into [Roam](https:
 npm install --save wf2roam
 ```
 
+### Use it
+
+
+## As command-line script
+
 ### Install as a command-line tool
 
 ```bash
-sudo npm install --global wf2roam
+npm install --global wf2roam
+```
 
-wf2roam auth # run this once to ensure you're authenticated
+### Use it
+
+The simplest way to use it
+
+```bash
+wf2roam
+
 ```
