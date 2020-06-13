@@ -121,3 +121,5 @@ This data includes not just the tree but also a vital piece of metadata: the mom
 # Contributing
 
 Ummm yeah hmu. I haven't done much managing of OSS projects but if you submit a pull request we can figure something out. Talk to me about it on Twitter [@Malcolm_Ocean](https://twitter.com/Malcolm_Ocean) as I don't check GitHub notifications much.
+
+See [here](https://roamresearch.com/#/app/help/page/RxZF78p60) for Roam's JSON schema.
